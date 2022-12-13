@@ -1,8 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, SafeAreaView, View } from "react-native";
+import { Image, View } from "react-native";
 import styles from '../styles/splash.scss';
 import { Dimensions, ActivityIndicator } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSpring, animated, config } from "@react-spring/native";
 
 const { width, height } = Dimensions.get('window');
@@ -33,13 +33,13 @@ export default function Splash({ cb }) {
     })
 
     return (
-        <SafeAreaView>
+        <View>
             <StatusBar hidden />
 
             <animated.View style={{ ...styles.container, ...fadeAnim, ...jumpAnim }}>
                 <Image style={{ width: logoDim * 0.8, height: logoDim * 0.8, maxWidth: logoMax, maxHeight: logoMax }} source={require('../assets/splash.jpg')} />
                 <ActivityIndicator animating={loading} />
             </animated.View>
-        </SafeAreaView>
+        </View>
     );
 }
