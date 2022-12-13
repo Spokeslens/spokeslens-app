@@ -3,7 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import axios from 'axios';
 import { deleteItemAsync, getItemAsync, setItemAsync } from 'expo-secure-store';
 import { useEffect, useState } from 'react';
-import { Splash } from './screens';
+import { Dashboard, Splash } from './screens';
 import { API_URL, GOOGLE_ID } from '@env';
 import { useAuthRequest } from 'expo-auth-session/providers/google';
 import { maybeCompleteAuthSession } from 'expo-web-browser';
@@ -32,7 +32,7 @@ export default function App() {
         androidClientId: GOOGLE_ID,
         responseType: "id_token token",
         usePKCE: false,
-        extraParams: { nonce: Math.floor(Math.random() * 16).toString(16) }
+        extraParams: { nonce: Math.floor(Math.random() * 16).toString(16) } // TODO - better hex generation
     });
 
     // Check previous login / start new login
@@ -73,7 +73,7 @@ export default function App() {
     return (
         <NavigationContainer theme={theme}>
             <Drawer.Navigator screenOptions={{ headerShown: false }}>
-                <Drawer.Screen name="Splash" component={Splash} />
+                <Drawer.Screen name="Dashboard" component={Dashboard} />
             </Drawer.Navigator>
         </NavigationContainer>
     );
