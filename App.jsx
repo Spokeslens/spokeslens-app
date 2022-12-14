@@ -7,6 +7,7 @@ import { Dashboard, Splash } from './screens';
 import { API_URL, GOOGLE_ID } from '@env';
 import { useAuthRequest } from 'expo-auth-session/providers/google';
 import { maybeCompleteAuthSession } from 'expo-web-browser';
+import 'react-native-gesture-handler';
 
 maybeCompleteAuthSession();
 
@@ -39,7 +40,7 @@ export default function App() {
     const loadUser = async () => {
         let saved = await getItemAsync("user"); // token saved in secure store?
 
-        if (saved) getUserFromToken();
+        if (saved) getUserFromToken(saved);
         else promptAsync();
     }
 
@@ -61,10 +62,18 @@ export default function App() {
             setUser(data);
         } catch (error) {
             if (error.response.status === 401) {
-                deleteItemAsync("user");
-                promptAsync();
+                try {
+                    // Consider initial login
+                    let { data } = await axios.post(`${API_URL}/supervisor/signup`, null, { headers: { "X-ZUMO-AUTH": token } });
+                    await setItemAsync("user", token); // save for persistency
+                    setUser(data);
+                } catch (error) {
+                    // Refresh token
+                    deleteItemAsync("user");
+                    promptAsync();
+                }
             }
-            else alert("Unknown error occured"); // TODO - prettify
+            else alert("Unexpected error occured"); // TODO - prettify
         }
     }
 
