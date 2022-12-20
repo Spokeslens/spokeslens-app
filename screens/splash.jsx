@@ -37,7 +37,7 @@ export default function Splash({ cb }) {
             <StatusBar hidden />
 
             <animated.View style={{ ...styles.container, ...fadeAnim, ...jumpAnim }}>
-                <Image style={{ width: logoDim * 0.8, height: logoDim * 0.8, maxWidth: logoMax, maxHeight: logoMax }} source={require('../assets/splash.jpg')} />
+                <Image style={{ width: logoDim * 0.8, height: logoDim * 0.8, maxWidth: logoMax, maxHeight: logoMax }} source={require('../assets/splash.png')} />
                 <ActivityIndicator animating={loading} />
             </animated.View>
         </View>

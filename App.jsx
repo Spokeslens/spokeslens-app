@@ -8,6 +8,8 @@ import { API_URL, GOOGLE_ID } from '@env';
 import { useAuthRequest } from 'expo-auth-session/providers/google';
 import { maybeCompleteAuthSession } from 'expo-web-browser';
 import 'react-native-gesture-handler';
+import Patients from './screens/patients';
+import http from './lib/http';
 
 maybeCompleteAuthSession();
 
@@ -19,7 +21,8 @@ const theme = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
-        background: 'white'
+        background: '#E9E9EF',
+        text: '#2B2E5C'
     }
 }
 
@@ -60,13 +63,16 @@ export default function App() {
             let { data } = await axios.get(`${API_URL}/supervisor`, { headers: { "X-ZUMO-AUTH": token } });
             await setItemAsync("user", token); // save for persistency
             setUser(data);
+            http.initialize(token, () => { deleteItemAsync("user").then(() => setUser(undefined)) });
         } catch (error) {
+            console.error(error);
             if (error.response.status === 401) {
                 try {
                     // Consider initial login
                     let { data } = await axios.post(`${API_URL}/supervisor/signup`, null, { headers: { "X-ZUMO-AUTH": token } });
                     await setItemAsync("user", token); // save for persistency
                     setUser(data);
+                    http.initialize(token, () => { deleteItemAsync("user").then(() => setUser(undefined)) });
                 } catch (error) {
                     // Refresh token
                     deleteItemAsync("user");
@@ -81,8 +87,9 @@ export default function App() {
 
     return (
         <NavigationContainer theme={theme}>
-            <Drawer.Navigator screenOptions={{ headerShown: false }}>
+            <Drawer.Navigator initialRouteName="Dashboard">
                 <Drawer.Screen name="Dashboard" component={Dashboard} />
+                <Drawer.Screen name="Patients" component={Patients} />
             </Drawer.Navigator>
         </NavigationContainer>
     );
