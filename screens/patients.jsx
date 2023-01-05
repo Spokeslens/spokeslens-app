@@ -61,11 +61,11 @@ export default function Patients() {
 
                             <View style={styles.info}>
                                 <Text style={styles.t}>{v.name} | {v.device ?? "(Vacant)"}</Text>
-                                {!v.device ? (
+                                {v.device ? (
                                     <View style={styles.alert}>
-                                        <animated.Image style={{ ...styles.icon, ...blinkAnim, display: v.notify ? "flex" : "none" }} source={require("../assets/notify.png")} />
+                                        <animated.Image style={{ ...styles.icon, ...blinkAnim, display: v.state === "help" ? "flex" : "none" }} source={require("../assets/notify.png")} />
 
-                                        <animated.Image style={{ ...styles.icon, ...blinkAnim, display: v.emergency ? "flex" : "none" }} source={require("../assets/emergency.png")} />
+                                        <animated.Image style={{ ...styles.icon, ...blinkAnim, display: v.state === "emergency" ? "flex" : "none" }} source={require("../assets/emergency.png")} />
                                     </View>
                                 ) : <Text style={styles.tt}>{v.code}</Text>}
                             </View>
